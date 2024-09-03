@@ -2,6 +2,8 @@ package com.eazybytes.accounts.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,4 +27,16 @@ public class BaseEntity {
 
     @Column(insertable = false)
     private String updatedBy;
+
+    @PrePersist
+    public void onPrePersist() {
+        this.setCreatedBy("Anonymous");
+        this.setCreatedAt(LocalDateTime.now());
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        this.setUpdatedBy("Anonymous");
+        this.setUpdatedAt(LocalDateTime.now());
+    }
 }

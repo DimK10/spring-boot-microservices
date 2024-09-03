@@ -16,7 +16,6 @@ public class Accounts extends BaseEntity {
 
     @Column(name = "account_number")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountNumber;
 
     @Column(name = "account_type")
@@ -24,4 +23,7 @@ public class Accounts extends BaseEntity {
 
     @Column(name = "branch_address")
     private String branchAddress;
+
+    @Version
+    private Long version;
 }

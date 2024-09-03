@@ -3,6 +3,8 @@ package com.eazybytes.accounts.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -22,4 +24,7 @@ public class Customer extends BaseEntity {
 
     @Column(name = "mobile_number")
     private String mobileNumber;
+
+    @Version
+    private Long version;
 }
