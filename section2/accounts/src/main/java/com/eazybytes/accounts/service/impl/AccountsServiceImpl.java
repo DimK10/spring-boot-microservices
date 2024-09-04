@@ -15,6 +15,7 @@ import com.eazybytes.accounts.service.IAccountsService;
 import jakarta.persistence.LockModeType;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class AccountsServiceImpl implements IAccountsService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Modifying
     @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
     public void createAccount(CustomerDto customerDto) {
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
@@ -61,6 +63,7 @@ public class AccountsServiceImpl implements IAccountsService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Modifying
     @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
     public boolean updateAccount(CustomerDto customerDto) {
 
@@ -86,6 +89,21 @@ public class AccountsServiceImpl implements IAccountsService {
         }
 
         return  isUpdated;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @Modifying
+    @Lock(LockModeType.WRITE)
+    public boolean deleteAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        );
+
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+        customerRepository.deleteById(customer.getCustomerId());
+
+        return true;
     }
 
 
