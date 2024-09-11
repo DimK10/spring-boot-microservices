@@ -28,3 +28,7 @@ First, the dev needs to add the image tag in pom xml
 Then, run the following maven command:
 
 ```mvn spring-boot:build-image```
+
+
+```mvn compile jib:dockerBuild```
+```mvn compile jib:build```
