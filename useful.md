@@ -31,4 +31,7 @@ Then, run the following maven command:
 
 
 ```mvn compile jib:dockerBuild```
+
 ```mvn compile jib:build```
+
+```docker image push docker.io/dimk10/accounts:s4```
