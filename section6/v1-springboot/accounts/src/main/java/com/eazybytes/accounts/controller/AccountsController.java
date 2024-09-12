@@ -2,6 +2,7 @@ package com.eazybytes.accounts.controller;
 
 
 import com.eazybytes.accounts.cosntants.AccountsConstants;
+import com.eazybytes.accounts.dto.AccountsContactInfoDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ErrorResponseDto;
 import com.eazybytes.accounts.dto.ResponseDto;
@@ -14,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -40,6 +40,8 @@ public class AccountsController {
     private String buildVersion;
     
     private final Environment environment;
+
+    private final AccountsContactInfoDto accountsContactInfoDto;
 
     @Operation(
             summary = "Create Account REST API",
@@ -205,5 +207,28 @@ public class AccountsController {
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get contact info",
+            description = "Get contact info that is deployed into accounts microservice"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+        return ResponseEntity.status(HttpStatus.OK).body(accountsContactInfoDto);
     }
 }
